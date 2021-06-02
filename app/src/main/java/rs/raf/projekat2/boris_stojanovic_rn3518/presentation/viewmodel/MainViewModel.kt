@@ -6,12 +6,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import rs.raf.projekat2.boris_stojanovic_rn3518.data.models.recipe.Recipe
 import rs.raf.projekat2.boris_stojanovic_rn3518.data.models.Resource
 import rs.raf.projekat2.boris_stojanovic_rn3518.data.repositories.RecipeRepository
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.contract.MainContract
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.states.AddRecipeState
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.states.RecipesState
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.states.SingleRecipeState
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -21,7 +20,7 @@ class MainViewModel(
 
     private val subscriptions = CompositeDisposable()
     override val recipesState: MutableLiveData<RecipesState> = MutableLiveData()
-    override val addDone: MutableLiveData<AddRecipeState> = MutableLiveData()
+    override val recipeState: MutableLiveData<SingleRecipeState> = MutableLiveData()
 
     private val publishSubject: PublishSubject<String> = PublishSubject.create()
 
@@ -94,20 +93,42 @@ class MainViewModel(
         publishSubject.onNext(category)
     }
 
-    override fun addRecipe(recipe: Recipe) {
+    override fun findRecipeById(rId: String) {
         val subscription = recipeRepository
-            .insert(recipe)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    addDone.value = AddRecipeState.Success
-                },
-                {
-                    addDone.value = AddRecipeState.Error("Error happened while adding movie")
-                    Timber.e(it)
-                }
-            )
+                .find(rId)
+                .startWith(Resource.Loading()) //Kada se pokrene fetch hocemo da postavimo stanje na Loading
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            when(it) {
+                                is Resource.Loading -> recipeState.value = SingleRecipeState.Loading
+                                is Resource.Success -> recipeState.value = SingleRecipeState.DataFetched
+                                is Resource.Error -> recipeState.value = SingleRecipeState.Error("Error happened while fetching data from the server")
+                            }
+                        },
+                        {
+                            recipeState.value = SingleRecipeState.Error("Error happened while fetching data from the server")
+                            Timber.e(it)
+                        }
+                )
+        subscriptions.add(subscription)
+    }
+
+    override fun getRecipeById(id: String) {
+        val subscription = recipeRepository
+                .getById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            recipeState.value = SingleRecipeState.Success(it)
+                        },
+                        {
+                            recipeState.value = SingleRecipeState.Error("Error happened while fetching data from db")
+                            Timber.e(it)
+                        }
+                )
         subscriptions.add(subscription)
     }
 

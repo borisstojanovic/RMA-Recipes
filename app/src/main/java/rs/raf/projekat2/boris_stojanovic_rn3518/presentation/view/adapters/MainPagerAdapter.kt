@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import rs.raf.projekat2.boris_stojanovic_rn3518.R
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments.InputFragment
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments.ListFragment
 
 class MainPagerAdapter(
@@ -22,7 +21,7 @@ class MainPagerAdapter(
     override fun getItem(position: Int): Fragment {
         return when(position) {
             FRAGMENT_1 -> ListFragment()
-            else -> InputFragment()
+            else -> ListFragment()
         }
     }
 

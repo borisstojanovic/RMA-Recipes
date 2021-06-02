@@ -7,7 +7,7 @@ import rs.raf.projekat2.boris_stojanovic_rn3518.data.models.category.CategoryRes
 
 interface CategoryService {
 
-    @GET("categories")
+    @GET("v2/categories")
     fun getAll(@Query("limit") limit: Int = 250): Observable<CategoryResponse>
 
 }

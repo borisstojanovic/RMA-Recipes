@@ -10,7 +10,7 @@ import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.viewmodel.MealViewM
 
 val mealModule = module {
 
-    viewModel { MealViewModel(mealRepository = get()) }
+    viewModel { MealViewModel(mealRepository = get(), recipeRepository = get()) }
 
     single<MealRepository> { MealRepositoryImpl(localDataSource = get()) }
 

@@ -46,7 +46,7 @@ fun createRetrofit(moshi: Moshi,
                    httpClient: OkHttpClient
 ): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("https://recipesapi.herokuapp.com/api/v2/")
+        .baseUrl("https://recipesapi.herokuapp.com/api/")
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
         .client(httpClient)

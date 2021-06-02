@@ -4,4 +4,9 @@
     <string name="input">Add Movie</string>
     <string name="search">Search</string>
     <string name="add">Add</string>
+    <string-array name="categories">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+    </string-array>
 </resources>

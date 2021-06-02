@@ -9,6 +9,7 @@ interface RecipeRepository {
 
     fun search(q:String, page: Int): Observable<Resource<Unit>>
     fun find(rId: String): Observable<Resource<Unit>>
+    fun getById(id: String): Observable<Recipe>
     fun getAll(): Observable<List<Recipe>>
     fun getAllByCategory(category: String): Observable<List<Recipe>>
     fun insert(recipe: Recipe): Completable

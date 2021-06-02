@@ -11,5 +11,4 @@ data class RecipeEntity(
     val imageUrl: String,
     val title : String,
     val ingredients: List<String>,
-    @ColumnInfo(name = "category_title") val category: String
 )

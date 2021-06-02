@@ -9,9 +9,9 @@ import rs.raf.projekat2.boris_stojanovic_rn3518.data.models.recipe.RecipeRespons
 
 interface RecipeService {
 
-    @GET("recipes")
+    @GET("v2/recipes")
     fun search(@Query("q") q: String, @Query("page") page: Int): Observable<RecipeResponse>
 
-    @GET("recipes")
+    @GET("get")
     fun find(@Query("rId") rId: String): Observable<RecipeDetailsResponse>
 }

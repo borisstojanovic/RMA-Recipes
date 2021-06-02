@@ -8,18 +8,22 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import rs.raf.projekat2.boris_stojanovic_rn3518.data.models.meal.Meal
 import rs.raf.projekat2.boris_stojanovic_rn3518.data.repositories.MealRepository
+import rs.raf.projekat2.boris_stojanovic_rn3518.data.repositories.RecipeRepository
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.contract.MealContract
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.states.AddMealState
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.states.MealState
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.states.SingleRecipeState
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class MealViewModel(
-    private val mealRepository: MealRepository
+    private val mealRepository: MealRepository,
+    private val recipeRepository: RecipeRepository
 ) : ViewModel(), MealContract.ViewModel {
 
     private val subscriptions = CompositeDisposable()
     override val mealState: MutableLiveData<MealState> = MutableLiveData()
+    override val recipeState: MutableLiveData<SingleRecipeState> = MutableLiveData()
     override val addDone: MutableLiveData<AddMealState> = MutableLiveData()
 
     private val publishSubject: PublishSubject<String> = PublishSubject.create()
@@ -85,6 +89,23 @@ class MealViewModel(
                     Timber.e(it)
                 }
             )
+        subscriptions.add(subscription)
+    }
+
+    override fun getRecipeById(id: String) {
+        val subscription = recipeRepository
+                .getById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            recipeState.value = SingleRecipeState.Success(it)
+                        },
+                        {
+                            recipeState.value = SingleRecipeState.Error("Error happened while fetching data from db")
+                            Timber.e(it)
+                        }
+                )
         subscriptions.add(subscription)
     }
 

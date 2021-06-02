@@ -18,6 +18,9 @@ abstract class RecipesDao {
     @Query("SELECT * FROM recipes")
     abstract fun getAll(): Observable<List<RecipeEntity>>
 
+    @Query("SELECT * FROM recipes WHERE id = :id")
+    abstract fun getById(id: String): Observable<RecipeEntity>
+
     @Query("DELETE FROM recipes")
     abstract fun deleteAll()
 
@@ -30,7 +33,7 @@ abstract class RecipesDao {
     @Update
     abstract fun update(recipeEntity: RecipeEntity)
 
-    @Query("SELECT * FROM recipes WHERE category_title LIKE :category || '%'")
+    @Query("SELECT * FROM recipes WHERE title LIKE '%' || :category || '%'")
     abstract fun getByCategory(category: String): Observable<List<RecipeEntity>>
 
     @Transaction

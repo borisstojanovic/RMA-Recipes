@@ -19,6 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.activities.RecipeDetailsActivity"/>
+        <activity android:name="rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.activities.AddMealActivity"/>
     </application>
 
 </manifest>

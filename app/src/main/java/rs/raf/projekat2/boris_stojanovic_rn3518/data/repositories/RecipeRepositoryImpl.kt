@@ -23,7 +23,6 @@ class RecipeRepositoryImpl(
                         it.imageUrl,
                         it.title,
                         listOf(),
-                        q
                     )
                 }
                 localDataSource.deleteAndInsertAll(entities)
@@ -39,17 +38,28 @@ class RecipeRepositoryImpl(
             .doOnNext{
                 val entity =
                     RecipeEntity(
-                        it.id,
-                        it.imageUrl,
-                        it.title,
-                        it.ingredients,
-                        ""
+                        it.recipe.recipe_id,
+                        it.recipe.image_url,
+                        it.recipe.title,
+                        it.recipe.ingredients,
                     )
                 localDataSource.update(entity)
             }
             .map {
                 Resource.Success(Unit)
             }
+    }
+
+    override fun getById(id: String): Observable<Recipe> {
+        return localDataSource.getById(id)
+                .map {
+                    Recipe(
+                        it.id,
+                        it.title,
+                        it.imageUrl,
+                        it.ingredients
+                    )
+                }
     }
 
     override fun getAll(): Observable<List<Recipe>> {
@@ -61,7 +71,7 @@ class RecipeRepositoryImpl(
                         it.id,
                         it.title,
                         it.imageUrl,
-                        it.category
+                        it.ingredients
                     )
                 }
             }
@@ -76,7 +86,7 @@ class RecipeRepositoryImpl(
                         it.id,
                         it.title,
                         it.imageUrl,
-                        it.category
+                        it.ingredients
                     )
                 }
             }
@@ -88,8 +98,7 @@ class RecipeRepositoryImpl(
                 recipe.id,
                 recipe.imageUrl,
                 recipe.title,
-                listOf(),
-                recipe.category
+                recipe.ingredients
             )
         return localDataSource
             .insert(recipeEntity)
