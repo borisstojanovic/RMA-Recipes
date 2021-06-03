@@ -2,17 +2,12 @@ package rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.SearchView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -58,28 +53,31 @@ class RecipeListFragment : Fragment(R.layout.fragment_recipe_list) {
     }
 
     private fun initUi() {
+        initSearchBar()
         initRecycler()
         initListeners()
     }
 
+    private fun initSearchBar() {
+        binding.recipeSearchBar.focusable = View.NOT_FOCUSABLE
+        binding.recipeSearchBar.isIconified = false
+        binding.recipeSearchBar.clearFocus()
+    }
+
     private fun initRecycler() {
-        binding.listRv.layoutManager = LinearLayoutManager(context)
+        binding.recipeListRv.layoutManager = LinearLayoutManager(context)
+
         adapter = RecipeAdapter{ item ->
             activity?.let{
                 val intent = Intent (it, RecipeDetailsActivity::class.java)
                 intent.putExtra("rId", item.id)
                 it.startActivity(intent)
             }
-        };
-        binding.listRv.adapter = adapter
-        val dividerItemDecoration = DividerItemDecoration(binding.listRv.context, resources.configuration.orientation)
-        /*
-        val drawable = ContextCompat.getDrawable(this.requireContext(), R.drawable.divider)
-        if (drawable != null) {
-            dividerItemDecoration.setDrawable(drawable)
         }
-         */
-        binding.listRv.addItemDecoration(dividerItemDecoration);
+
+        binding.recipeListRv.adapter = adapter
+        val dividerItemDecoration = DividerItemDecoration(binding.recipeListRv.context, resources.configuration.orientation)
+        binding.recipeListRv.addItemDecoration(dividerItemDecoration);
     }
 
     private fun initListeners() {
@@ -128,7 +126,7 @@ class RecipeListFragment : Fragment(R.layout.fragment_recipe_list) {
 
     private fun showLoadingState(loading: Boolean) {
         binding.recipeSearchBar.isVisible = !loading
-        binding.listRv.isVisible = !loading
+        binding.recipeListRv.isVisible = !loading
         binding.loadingPb.isVisible = loading
     }
 

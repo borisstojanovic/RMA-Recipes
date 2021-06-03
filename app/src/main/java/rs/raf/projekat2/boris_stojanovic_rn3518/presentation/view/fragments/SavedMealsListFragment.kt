@@ -85,6 +85,7 @@ class SavedMealsListFragment : Fragment(R.layout.fragment_saved_meals_list) {
             Timber.e(it.toString())
             renderState(it)
         })
+        mealViewModel.getAllMeals()
     }
 
     private fun renderState(state: MealState) {

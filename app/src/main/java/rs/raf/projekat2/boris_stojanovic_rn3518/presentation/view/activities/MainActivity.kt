@@ -22,23 +22,6 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        menu?.findItem(R.id.categoriesMenuItem)?.setOnMenuItemClickListener {
-            val intent = Intent (this, CategoryListActivity::class.java)
-            startActivity(intent)
-            finish()
-            return@setOnMenuItemClickListener true
-        }
-        menu?.findItem(R.id.savedMealsMenuItem)?.setOnMenuItemClickListener {
-            val intent = Intent (this, SavedMealListActivity::class.java)
-            startActivity(intent)
-            finish()
-            return@setOnMenuItemClickListener true
-        }
-        return super.onCreateOptionsMenu(menu)
-    }
-
     override fun onBackPressed() {
         val mgr = supportFragmentManager
         if (mgr.backStackEntryCount == 0) {

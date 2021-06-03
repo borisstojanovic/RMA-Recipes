@@ -51,8 +51,15 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     }
 
     private fun initUi() {
+        initSearchBar()
         initRecycler()
         initListeners()
+    }
+
+    private fun initSearchBar() {
+        binding.searchBar.focusable = View.NOT_FOCUSABLE
+        binding.searchBar.isIconified = false
+        binding.searchBar.clearFocus()
     }
 
     private fun initRecycler() {
@@ -62,10 +69,10 @@ class ListFragment : Fragment(R.layout.fragment_list) {
             mainViewModel.getRecipesByCategory(item.title)
             val ft = activity?.supportFragmentManager?.beginTransaction()
             ft?.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out)
-            ft?.replace(R.id.fcvCategoryList, RecipeListFragment())
+            ft?.replace(R.id.fcvContainer, RecipeListFragment())
             ft?.addToBackStack(null)
             ft?.commit()
-        };
+        }
         binding.listRv.adapter = adapter
         val dividerItemDecoration = DividerItemDecoration(binding.listRv.context, resources.configuration.orientation);
         binding.listRv.addItemDecoration(dividerItemDecoration);
@@ -80,7 +87,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                     mainViewModel.getRecipesByCategory(query.toString())
                     val ft = activity?.supportFragmentManager?.beginTransaction()
                     ft?.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out)
-                    ft?.replace(R.id.fcvCategoryList, RecipeListFragment())
+                    ft?.replace(R.id.fcvContainer, RecipeListFragment())
                     ft?.addToBackStack(null)
                     ft?.commit()
                     return true

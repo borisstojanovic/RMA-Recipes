@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import rs.raf.projekat2.boris_stojanovic_rn3518.R
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments.ContainerFragment
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments.ListFragment
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments.SavedMealsListFragment
 
@@ -21,7 +22,7 @@ class MainPagerAdapter(
 
     override fun getItem(position: Int): Fragment {
         return when(position) {
-            FRAGMENT_1 -> ListFragment()
+            FRAGMENT_1 -> ContainerFragment()
             else -> SavedMealsListFragment()
         }
     }

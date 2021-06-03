@@ -1,5 +1,6 @@
 package rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
@@ -7,6 +8,7 @@ import android.content.*
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -41,6 +44,9 @@ class AddMealFragment : Fragment(R.layout.fragment_add_meal){
     private val mealViewModel: MealContract.ViewModel by sharedViewModel<MealViewModel>()
 
     private var imagePath: String? = null
+    private val REQUEST_CODE = 42
+    private var path: String = Calendar.getInstance().timeInMillis.toString() + "slika.jpg"
+    private lateinit var photoFile: File
 
     private val getPicture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == AppCompatActivity.RESULT_OK) {
@@ -108,16 +114,23 @@ class AddMealFragment : Fragment(R.layout.fragment_add_meal){
             builder?.setMessage("Do you want to start your camera app?")
                     ?.setTitle("Camera Dialog")
             builder?.apply {
-                setPositiveButton("Ok",
+                setPositiveButton(R.string.ok,
                         DialogInterface.OnClickListener { dialog, id ->
                             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                            try {
-                                getPicture.launch(takePictureIntent)
-                            }catch (e: ActivityNotFoundException) {
-                                Toast.makeText(context, "Camera app not found!", Toast.LENGTH_SHORT).show()
+                            photoFile = getPhotoFile(path)
+
+                            // This DOESN'T work for API >= 24 (starting 2016)
+                            // takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoFile)
+
+                            val fileProvider = FileProvider.getUriForFile(context, "rs.raf.projekat2.boris_stojanovic_rn3518.fileprovider", photoFile)
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
+                            if (takePictureIntent.resolveActivity(context.packageManager) != null) {
+                                startActivityForResult(takePictureIntent, REQUEST_CODE)
+                            } else {
+                                Toast.makeText(context, "Unable to open camera", Toast.LENGTH_SHORT).show()
                             }
                         })
-                setNegativeButton("Cancel",
+                setNegativeButton(R.string.cancel,
                         DialogInterface.OnClickListener { dialog, id ->
                             // User cancelled the dialog
                         })
@@ -129,6 +142,23 @@ class AddMealFragment : Fragment(R.layout.fragment_add_meal){
         binding.datePickerButton.setOnClickListener{
             initDatePicker()
         }
+    }
+
+    private fun getPhotoFile(path: String): File{
+        val storageDirectory = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(path, ".jpg", storageDirectory)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//            val takenImage = data?.extras?.get("data") as Bitmap
+            val takenImage = BitmapFactory.decodeFile(photoFile.absolutePath)
+            imagePath = photoFile.absolutePath
+            binding.addMealImageView.setImageBitmap(takenImage)
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+
     }
 
     private fun initObservers() {
@@ -144,8 +174,11 @@ class AddMealFragment : Fragment(R.layout.fragment_add_meal){
 
     private fun renderAddState(state: AddMealState) {
         when(state) {
-            is AddMealState.Success -> Toast.makeText(context, "Meal added", Toast.LENGTH_SHORT)
-                    .show()
+            is AddMealState.Success -> {
+                Toast.makeText(context, "Meal added", Toast.LENGTH_SHORT)
+                        .show()
+                activity?.finish()
+            }
             is AddMealState.Error -> Toast.makeText(context, "Error happened", Toast.LENGTH_SHORT)
                     .show()
         }

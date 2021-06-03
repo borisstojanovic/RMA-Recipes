@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Projekat2</string>
+    <string name="input">Dodaj Jelo</string>
+    <string name="searchRecipes">Pretrazi Recepte…</string>
+    <string name="search">Pretraga</string>
+    <string name="add">Dodaj</string>
+    <string name="missingFields">Sva polja su neophodna</string>
+    <string name="invalidLogin">Pogresna lozinka</string>
+    <string name="categories">Kategorije</string>
+    <string name="saved">Snimljena jela</string>
+    <string name="planned_meals">Planirana jela</string>
+    <string name="save_recipe">Snimi Recept</string>
+    <string name="select_date">Izaberi Datum</string>
+    <string name="imageview">Slika jela</string>
+    <string name="cancel">Otkazi</string>
+    <string name="ok">Potvrdi</string>
+</resources>

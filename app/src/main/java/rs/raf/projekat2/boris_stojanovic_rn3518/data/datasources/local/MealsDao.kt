@@ -14,7 +14,7 @@ abstract class MealsDao {
     @Insert( onConflict = OnConflictStrategy.REPLACE )
     abstract fun insertAll(entities: List<MealEntity>): Completable
 
-    @Query("SELECT * FROM meals")
+    @Query("SELECT * FROM meals order by meal_date asc")
     abstract fun getAll(): Observable<List<MealEntity>>
 
     @Query("DELETE FROM meals")

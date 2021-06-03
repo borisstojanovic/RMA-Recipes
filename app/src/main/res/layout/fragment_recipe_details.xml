@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,10 +19,12 @@
         android:id="@+id/recipeDetailsTitleTV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="20dp"
         android:scrollHorizontally="false"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/recipeDetailsImageView"
         app:layout_constraintStart_toStartOf="@+id/recipeDetailsImageView"
         app:layout_constraintTop_toBottomOf="@+id/recipeDetailsImageView" />
@@ -35,7 +36,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
         android:text="Ingredients"
-        app:layout_constraintEnd_toEndOf="@+id/recipeDetailsTitleTV"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.046"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipeDetailsTitleTV" />
@@ -44,11 +45,11 @@
         android:id="@+id/recipeDetailsIngredientsTV"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/textview_border"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="24dp"
+        android:background="@drawable/textview_border"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/addRecipeButton"
         app:layout_constraintEnd_toEndOf="parent"
