@@ -2,46 +2,43 @@ package rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import rs.raf.projekat2.boris_stojanovic_rn3518.R
-import rs.raf.projekat2.boris_stojanovic_rn3518.databinding.FragmentRecipeListBinding
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.contract.MainContract
+import rs.raf.projekat2.boris_stojanovic_rn3518.databinding.FragmentSavedMealsListBinding
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.contract.MealContract
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.activities.RecipeDetailsActivity
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.recycler.adapter.RecipeAdapter
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.states.RecipesState
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.viewmodel.MainViewModel
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.recycler.adapter.MealAdapter
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.states.MealState
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.viewmodel.MealViewModel
 import timber.log.Timber
 
-class RecipeListFragment : Fragment(R.layout.fragment_recipe_list) {
+class SavedMealsListFragment : Fragment(R.layout.fragment_recipe_list) {
 
-    private val mainViewModel: MainContract.ViewModel by sharedViewModel<MainViewModel>()
+    private val mealViewModel: MealContract.ViewModel by sharedViewModel<MealViewModel>()
 
-    private var _binding: FragmentRecipeListBinding? = null
+    private var _binding: FragmentSavedMealsListBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private lateinit var adapter: RecipeAdapter
+    private lateinit var adapter: MealAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
+        _binding = FragmentSavedMealsListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -62,10 +59,10 @@ class RecipeListFragment : Fragment(R.layout.fragment_recipe_list) {
 
     private fun initRecycler() {
         binding.listRv.layoutManager = LinearLayoutManager(context)
-        adapter = RecipeAdapter{ item ->
+        adapter = MealAdapter{ item ->
             activity?.let{
                 val intent = Intent (it, RecipeDetailsActivity::class.java)
-                intent.putExtra("rId", item.id)
+                intent.putExtra("rId", item.rId)
                 it.startActivity(intent)
             }
         };
@@ -75,46 +72,33 @@ class RecipeListFragment : Fragment(R.layout.fragment_recipe_list) {
     }
 
     private fun initListeners() {
-        binding.inputEt.setOnEditorActionListener { v, actionId, event ->
-            if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                mainViewModel.searchRecipes(v.text.toString(), 1)
-                mainViewModel.getRecipesByCategory(v.text.toString())
-                true
-            } else {
-                false
-            }
-        }
+
     }
 
     private fun initObservers() {
-        mainViewModel.recipesState.observe(viewLifecycleOwner, Observer {
+        mealViewModel.mealState.observe(viewLifecycleOwner, Observer {
             Timber.e(it.toString())
             renderState(it)
         })
     }
 
-    private fun renderState(state: RecipesState) {
+    private fun renderState(state: MealState) {
         when (state) {
-            is RecipesState.Success -> {
+            is MealState.Success -> {
                 showLoadingState(false)
-                adapter.submitList(state.recipes)
+                adapter.submitList(state.meals)
             }
-            is RecipesState.Error -> {
+            is MealState.Error -> {
                 showLoadingState(false)
                 Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
             }
-            is RecipesState.DataFetched -> {
-                showLoadingState(false)
-                Toast.makeText(context, "Fresh data fetched from the server", Toast.LENGTH_LONG).show()
-            }
-            is RecipesState.Loading -> {
+            is MealState.Loading -> {
                 showLoadingState(true)
             }
         }
     }
 
     private fun showLoadingState(loading: Boolean) {
-        binding.inputEt.isVisible = !loading
         binding.listRv.isVisible = !loading
         binding.loadingPb.isVisible = loading
     }

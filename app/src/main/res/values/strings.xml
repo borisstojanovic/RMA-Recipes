@@ -4,6 +4,8 @@
     <string name="input">Add Movie</string>
     <string name="search">Search</string>
     <string name="add">Add</string>
+    <string name="missingFields">All Fields Are Required</string>
+    <string name="invalidLogin">Invalid Credentails</string>
     <string-array name="categories">
         <item>Breakfast</item>
         <item>Lunch</item>

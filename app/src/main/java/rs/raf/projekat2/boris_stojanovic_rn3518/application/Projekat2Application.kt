@@ -32,9 +32,9 @@ class Projekat2Application : Application() {
     private fun initKoin() {
         val modules = listOf(
             coreModule,
+            categoryModule,
             recipeModule,
             mealModule,
-            categoryModule
         )
         startKoin {
             androidLogger(Level.ERROR)

@@ -1,35 +1,28 @@
 package rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.ext.scope
 import rs.raf.projekat2.boris_stojanovic_rn3518.R
 import rs.raf.projekat2.boris_stojanovic_rn3518.databinding.FragmentListBinding
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.contract.CategoryContract
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.contract.MainContract
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.recycler.adapter.CategoryAdapter
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.recycler.adapter.RecipeAdapter
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.states.CategoryState
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.states.RecipesState
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.viewmodel.CategoryViewModel
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.viewmodel.MainViewModel
 import timber.log.Timber
 
 class ListFragment : Fragment(R.layout.fragment_list) {
 
-    private val categoryViewModel: CategoryContract.ViewModel by sharedViewModel<CategoryViewModel>()
+    private val mainViewModel: MainContract.ViewModel by sharedViewModel<MainViewModel>()
 
     private var _binding: FragmentListBinding? = null
     // This property is only valid between onCreateView and
@@ -65,13 +58,13 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     private fun initRecycler() {
         binding.listRv.layoutManager = LinearLayoutManager(context)
         adapter = CategoryAdapter { item ->
-            val recipeListFragment = RecipeListFragment()
-            val bundle = Bundle()
-            bundle.putString("category", item.title)
-            recipeListFragment.arguments = bundle
-            val ft = activity?.supportFragmentManager?.beginTransaction();
-            ft?.replace(R.id.fcvMainActivity, recipeListFragment);
-            ft?.commit();
+            mainViewModel.searchRecipes(item.title, 1)
+            mainViewModel.getRecipesByCategory(item.title)
+            val ft = activity?.supportFragmentManager?.beginTransaction()
+            ft?.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out)
+            ft?.replace(R.id.fcvMainActivity, RecipeListFragment())
+            ft?.addToBackStack(null)
+            ft?.commit()
         };
         binding.listRv.adapter = adapter
         val dividerItemDecoration = DividerItemDecoration(binding.listRv.context, resources.configuration.orientation);
@@ -79,6 +72,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     }
 
     private fun initListeners() {
+        /*
         binding.inputEt.setOnEditorActionListener { v, actionId, event ->
             if(actionId == EditorInfo.IME_ACTION_SEARCH){
                 val recipeListFragment = RecipeListFragment()
@@ -93,15 +87,37 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                 false
             }
         }
+         */
+        binding.searchBar.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if(query != null && !query.toString().isBlank()) {
+                    mainViewModel.searchRecipes(query.toString(), 1)
+                    mainViewModel.getRecipesByCategory(query.toString())
+                    val ft = activity?.supportFragmentManager?.beginTransaction()
+                    ft?.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out)
+                    ft?.replace(R.id.fcvMainActivity, RecipeListFragment())
+                    ft?.addToBackStack(null)
+                    ft?.commit()
+                    return true
+                }else {
+                    return false
+                }
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
     }
 
     private fun initObservers() {
-        categoryViewModel.categoryState.observe(viewLifecycleOwner, Observer {
+        mainViewModel.categoryState.observe(viewLifecycleOwner, Observer {
             Timber.e(it.toString())
             renderState(it)
         })
-        categoryViewModel.getAllCategories()
-        categoryViewModel.fetchAllCategories()
+        mainViewModel.getAllCategories()
+        mainViewModel.fetchAllCategories()
     }
 
     private fun renderState(state: CategoryState) {
@@ -125,7 +141,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     }
 
     private fun showLoadingState(loading: Boolean) {
-        binding.inputEt.isVisible = !loading
+        binding.searchBar.isVisible = !loading
         binding.listRv.isVisible = !loading
         binding.loadingPb.isVisible = loading
     }

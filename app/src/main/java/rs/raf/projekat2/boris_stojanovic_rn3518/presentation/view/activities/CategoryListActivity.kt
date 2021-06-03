@@ -4,20 +4,25 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import androidx.fragment.app.FragmentManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.projekat2.boris_stojanovic_rn3518.R
 import rs.raf.projekat2.boris_stojanovic_rn3518.databinding.ActivityMainBinding
+import rs.raf.projekat2.boris_stojanovic_rn3518.databinding.ActivityRecipeDetailsBinding
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.contract.MainContract
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments.ListFragment
-import rs.raf.vezbe11.presentation.view.adapters.MainPagerAdapter
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments.RecipeDetailsFragment
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.viewmodel.MainViewModel
 
-class MainActivity : AppCompatActivity() {
+class CategoryListActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityRecipeDetailsBinding
+
+    private val mainViewModel: MainContract.ViewModel by viewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityRecipeDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         init()
     }
@@ -53,6 +58,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initUi() {
-
+        mainViewModel.fetchAllCategories()
+        mainViewModel.getAllCategories()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fcvCategoryList, ListFragment())
+            .commit()
     }
 }

@@ -51,22 +51,9 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
     }
 
     private fun init() {
-        initUi()
         initObservers()
     }
 
-    private fun initUi() {
-        initViews()
-        initListeners()
-    }
-
-    private fun initViews() {
-
-    }
-
-    private fun initListeners() {
-
-    }
 
     private fun initObservers() {
         mainViewModel.recipeState.observe(viewLifecycleOwner, Observer {
@@ -109,9 +96,12 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
     }
 
     private fun showLoadingState(loading: Boolean) {
-        //binding.inputEt.isVisible = !loading
-        //binding.listRv.isVisible = !loading
-        //binding.loadingPb.isVisible = loading
+        binding.textView2.isVisible = !loading
+        binding.recipeDetailsIngredientsTV.isVisible = !loading
+        binding.recipeDetailsTitleTV.isVisible = !loading
+        binding.recipeDetailsImageView.isVisible = !loading
+        binding.recipeDetailsTitleTV.isVisible = !loading
+        binding.loadingPb.isVisible = loading
     }
 
     override fun onDestroyView() {
