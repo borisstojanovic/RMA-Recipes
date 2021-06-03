@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">Projekat2</string>
-    <string name="movies">Movies</string>
-    <string name="input">Add Movie</string>
+    <string name="input">Add Meal</string>
     <string name="search">Search</string>
     <string name="add">Add</string>
     <string name="missingFields">All Fields Are Required</string>
     <string name="invalidLogin">Invalid Credentails</string>
+    <string name="categories">Categories</string>
+    <string name="saved">Planned Meals</string>
+    <string name="planned_meals">Planned Meals</string>
     <string-array name="categories">
         <item>Breakfast</item>
         <item>Lunch</item>

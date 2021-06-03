@@ -37,7 +37,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-class AddMealFragment : Fragment(R.layout.fragment_add_meal){
+class WelcomeFragment : Fragment(R.layout.fragment_welcome){
     private val mealViewModel: MealContract.ViewModel by sharedViewModel<MealViewModel>()
 
     private var imagePath: String? = null

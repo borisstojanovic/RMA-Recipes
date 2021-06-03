@@ -2,4 +2,6 @@
 <resources>
     <string name="missingFields">All Fields Are Required</string>
     <string name="invalidLogin">Invalid Credentails</string>
+    <string name="categories">Categories</string>
+    <string name="planned_meals">Planned Meals</string>
 </resources>

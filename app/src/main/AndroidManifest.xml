@@ -28,6 +28,8 @@
         <activity android:name=".presentation.view.activities.LoginActivity"/>
         <activity android:name="rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.activities.RecipeDetailsActivity"/>
         <activity android:name="rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.activities.AddMealActivity"/>
+        <activity android:name="rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.activities.CategoryListActivity"/>
+        <activity android:name="rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.activities.SavedMealListActivity"/>
     </application>
 
 </manifest>

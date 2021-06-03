@@ -4,4 +4,8 @@ data class RecipeResponseItem(
     val id: String,
     val title: String,
     val imageUrl: String,
+    val socialUrl: Double,
+    val sourceUrl: String,
+    val publisher: String,
+    val publishedId: String
 )

@@ -1,14 +1,14 @@
 package rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.fragment.app.FragmentManager
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import rs.raf.projekat2.boris_stojanovic_rn3518.R
 import rs.raf.projekat2.boris_stojanovic_rn3518.databinding.ActivityMainBinding
-import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments.ListFragment
 import rs.raf.vezbe11.presentation.view.adapters.MainPagerAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -50,9 +50,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
         initUi()
+        initNavigation()
     }
 
     private fun initUi() {
-
+        binding.viewPager.adapter =
+                MainPagerAdapter(
+                        supportFragmentManager,
+                        this
+                )
+    }
+    private fun initNavigation() {
+        binding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
+            when (item.itemId) {
+                R.id.navigation_1 -> binding.viewPager.setCurrentItem(MainPagerAdapter.FRAGMENT_1, false)
+                R.id.navigation_2 -> binding.viewPager.setCurrentItem(MainPagerAdapter.FRAGMENT_2, false)
+            }
+            true
+        }
     }
 }

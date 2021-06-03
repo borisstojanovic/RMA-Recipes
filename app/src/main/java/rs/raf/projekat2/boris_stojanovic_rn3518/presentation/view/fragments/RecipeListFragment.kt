@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -70,20 +72,32 @@ class RecipeListFragment : Fragment(R.layout.fragment_recipe_list) {
             }
         };
         binding.listRv.adapter = adapter
-        val dividerItemDecoration = DividerItemDecoration(binding.listRv.context, resources.configuration.orientation);
+        val dividerItemDecoration = DividerItemDecoration(binding.listRv.context, resources.configuration.orientation)
+        /*
+        val drawable = ContextCompat.getDrawable(this.requireContext(), R.drawable.divider)
+        if (drawable != null) {
+            dividerItemDecoration.setDrawable(drawable)
+        }
+         */
         binding.listRv.addItemDecoration(dividerItemDecoration);
     }
 
     private fun initListeners() {
-        binding.inputEt.setOnEditorActionListener { v, actionId, event ->
-            if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                mainViewModel.searchRecipes(v.text.toString(), 1)
-                mainViewModel.getRecipesByCategory(v.text.toString())
-                true
-            } else {
-                false
+        binding.recipeSearchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if(query != null && !query.toString().isBlank()) {
+                    mainViewModel.searchRecipes(query.toString(), 1)
+                    mainViewModel.getRecipesByCategory(query.toString())
+                    return true
+                }else {
+                    return false
+                }
             }
-        }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 
     private fun initObservers() {
@@ -105,7 +119,6 @@ class RecipeListFragment : Fragment(R.layout.fragment_recipe_list) {
             }
             is RecipesState.DataFetched -> {
                 showLoadingState(false)
-                Toast.makeText(context, "Fresh data fetched from the server", Toast.LENGTH_LONG).show()
             }
             is RecipesState.Loading -> {
                 showLoadingState(true)
@@ -114,7 +127,7 @@ class RecipeListFragment : Fragment(R.layout.fragment_recipe_list) {
     }
 
     private fun showLoadingState(loading: Boolean) {
-        binding.inputEt.isVisible = !loading
+        binding.recipeSearchBar.isVisible = !loading
         binding.listRv.isVisible = !loading
         binding.loadingPb.isVisible = loading
     }

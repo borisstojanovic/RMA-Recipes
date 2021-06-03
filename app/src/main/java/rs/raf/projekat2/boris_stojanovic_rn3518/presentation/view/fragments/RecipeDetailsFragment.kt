@@ -87,7 +87,6 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
             }
             is SingleRecipeState.DataFetched -> {
                 showLoadingState(false)
-                Toast.makeText(context, "Fresh data fetched from the server", Toast.LENGTH_LONG).show()
             }
             is SingleRecipeState.Loading -> {
                 showLoadingState(true)

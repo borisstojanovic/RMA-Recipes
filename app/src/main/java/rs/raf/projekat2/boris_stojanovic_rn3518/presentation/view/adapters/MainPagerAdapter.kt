@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import rs.raf.projekat2.boris_stojanovic_rn3518.R
 import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments.ListFragment
+import rs.raf.projekat2.boris_stojanovic_rn3518.presentation.view.fragments.SavedMealsListFragment
 
 class MainPagerAdapter(
     fragmentManager: FragmentManager,
@@ -21,7 +22,7 @@ class MainPagerAdapter(
     override fun getItem(position: Int): Fragment {
         return when(position) {
             FRAGMENT_1 -> ListFragment()
-            else -> ListFragment()
+            else -> SavedMealsListFragment()
         }
     }
 
@@ -31,8 +32,8 @@ class MainPagerAdapter(
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when(position) {
-            FRAGMENT_1 -> context.getString(R.string.movies)
-            else -> context.getString(R.string.input)
+            FRAGMENT_1 -> context.getString(R.string.categories)
+            else -> context.getString(R.string.saved)
         }
     }
 

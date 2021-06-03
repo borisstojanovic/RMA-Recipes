@@ -22,6 +22,8 @@ class RecipeRepositoryImpl(
                         it.id,
                         it.imageUrl,
                         it.title,
+                        it.socialUrl,
+                        it.publisher,
                         listOf(),
                     )
                 }
@@ -41,9 +43,11 @@ class RecipeRepositoryImpl(
                         it.recipe.recipe_id,
                         it.recipe.image_url,
                         it.recipe.title,
+                        it.recipe.socialUrl,
+                        it.recipe.publisher,
                         it.recipe.ingredients,
                     )
-                localDataSource.update(entity)
+                localDataSource.insert(entity).blockingAwait()
             }
             .map {
                 Resource.Success(Unit)
@@ -55,8 +59,10 @@ class RecipeRepositoryImpl(
                 .map {
                     Recipe(
                         it.id,
-                        it.title,
                         it.imageUrl,
+                        it.title,
+                        it.socialUrl,
+                        it.publisher,
                         it.ingredients
                     )
                 }
@@ -69,8 +75,10 @@ class RecipeRepositoryImpl(
                 it.map {
                     Recipe(
                         it.id,
-                        it.title,
                         it.imageUrl,
+                        it.title,
+                        it.socialUrl,
+                        it.publisher,
                         it.ingredients
                     )
                 }
@@ -84,8 +92,10 @@ class RecipeRepositoryImpl(
                 it.map {
                     Recipe(
                         it.id,
-                        it.title,
                         it.imageUrl,
+                        it.title,
+                        it.socialUrl,
+                        it.publisher,
                         it.ingredients
                     )
                 }
@@ -98,6 +108,8 @@ class RecipeRepositoryImpl(
                 recipe.id,
                 recipe.imageUrl,
                 recipe.title,
+                recipe.socialUrl,
+                recipe.publisher,
                 recipe.ingredients
             )
         return localDataSource

@@ -10,5 +10,7 @@ data class RecipeEntity(
     val id: String,
     val imageUrl: String,
     val title : String,
+    val socialUrl: Double,
+    val publisher: String,
     val ingredients: List<String>,
 )

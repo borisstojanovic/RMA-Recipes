@@ -62,7 +62,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
             mainViewModel.getRecipesByCategory(item.title)
             val ft = activity?.supportFragmentManager?.beginTransaction()
             ft?.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out)
-            ft?.replace(R.id.fcvMainActivity, RecipeListFragment())
+            ft?.replace(R.id.fcvCategoryList, RecipeListFragment())
             ft?.addToBackStack(null)
             ft?.commit()
         };
@@ -72,22 +72,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     }
 
     private fun initListeners() {
-        /*
-        binding.inputEt.setOnEditorActionListener { v, actionId, event ->
-            if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                val recipeListFragment = RecipeListFragment()
-                val bundle = Bundle()
-                bundle.putString("category", v.text.toString())
-                recipeListFragment.arguments = bundle
-                val ft = activity?.supportFragmentManager?.beginTransaction();
-                ft?.replace(R.id.fcvMainActivity, recipeListFragment);
-                ft?.commit();
-                true
-            } else {
-                false
-            }
-        }
-         */
+
         binding.searchBar.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if(query != null && !query.toString().isBlank()) {
@@ -95,7 +80,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                     mainViewModel.getRecipesByCategory(query.toString())
                     val ft = activity?.supportFragmentManager?.beginTransaction()
                     ft?.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out)
-                    ft?.replace(R.id.fcvMainActivity, RecipeListFragment())
+                    ft?.replace(R.id.fcvCategoryList, RecipeListFragment())
                     ft?.addToBackStack(null)
                     ft?.commit()
                     return true
@@ -128,11 +113,9 @@ class ListFragment : Fragment(R.layout.fragment_list) {
             }
             is CategoryState.Error -> {
                 showLoadingState(false)
-                Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
             }
             is CategoryState.DataFetched -> {
                 showLoadingState(false)
-                Toast.makeText(context, "Fresh data fetched from the server", Toast.LENGTH_LONG).show()
             }
             is CategoryState.Loading -> {
                 showLoadingState(true)
