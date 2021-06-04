@@ -119,8 +119,6 @@ class AddMealFragment : Fragment(R.layout.fragment_add_meal){
                             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                             photoFile = getPhotoFile(path)
 
-                            // This DOESN'T work for API >= 24 (starting 2016)
-                            // takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoFile)
 
                             val fileProvider = FileProvider.getUriForFile(context, "rs.raf.projekat2.boris_stojanovic_rn3518.fileprovider", photoFile)
                             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
